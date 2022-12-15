@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "build:win-32": "build && electron-builder --win --ia32",
-    "build:win-64": "build && electron-builder --win --x64",
-    "build:mac": "build && electron-builder --mac",
+    "build:win-32": "yarn build && electron-builder --win --ia32",
+    "build:win-64": "yarn build && electron-builder --win --x64",
+    "build:mac": "yarn build && electron-builder --mac",
     "dev": "yarn run build && cross-env DEBUG=true electron . --trace-warnings"
   },
   "devDependencies": {
