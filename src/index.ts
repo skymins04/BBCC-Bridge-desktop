@@ -30,9 +30,14 @@ app.on("ready", () => {
     electronStorage.set(
       "position",
       { x: mainWindowState.x, y: mainWindowState.y },
-      () => {
-        console.log("saved", { x: mainWindowState.x, y: mainWindowState.y });
-      }
+      process.env.DEBUG
+        ? () => {
+            console.log("saved", {
+              x: mainWindowState.x,
+              y: mainWindowState.y,
+            });
+          }
+        : () => {}
     );
   });
   mainWindowState.manage(window);

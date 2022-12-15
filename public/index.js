@@ -29,9 +29,14 @@ electron_1.app.on("ready", () => {
     window.setTitle("BridgeBBCC Desktop");
     process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
     window.on("move", () => {
-        electron_json_storage_1.default.set("position", { x: mainWindowState.x, y: mainWindowState.y }, () => {
-            console.log("saved", { x: mainWindowState.x, y: mainWindowState.y });
-        });
+        electron_json_storage_1.default.set("position", { x: mainWindowState.x, y: mainWindowState.y }, process.env.DEBUG
+            ? () => {
+                console.log("saved", {
+                    x: mainWindowState.x,
+                    y: mainWindowState.y,
+                });
+            }
+            : () => { });
     });
     mainWindowState.manage(window);
 });
