@@ -1,0 +1,62 @@
+{
+  "name": "BridgeBBCC-desktop",
+  "version": "1.0.0",
+  "main": "public/index.js",
+  "repository": "https://github.com/skymins04/BridgeBBCC-desktop.git",
+  "author": "skymins04 <skymin0417@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "build:win-32": "electron-builder --win --ia32",
+    "build:win-64": "electron-builder --win --x64",
+    "build:mac": "electron-builder --mac",
+    "dev": "yarn run build && cross-env DEBUG=true electron . --trace-warnings"
+  },
+  "devDependencies": {
+    "@types/electron-store": "^3.2.0",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
+    "typescript": "^4.9.4"
+  },
+  "build": {
+    "productName": "BridgeBBCC Desktop",
+    "appId": "com.betaman.bridgebbcc-desktop",
+    "asar": false,
+    "protocols": {
+      "name": "BridgeBBCC-Desktop",
+      "schemes": [
+        "BridgeBBCC-Desktop"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "default"
+      ]
+    },
+    "dmg": {
+      "title": "BridgeBBCC Desktop"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "directories": {
+      "buildResources": "./resources/installer/",
+      "output": "./dist/",
+      "app": "."
+    }
+  },
+  "dependencies": {
+    "@types/electron-json-storage": "^4.5.0",
+    "electron-json-storage": "^4.6.0",
+    "electron-window-state": "^5.0.3"
+  }
+}
