@@ -28,7 +28,7 @@ electron_1.app.on("ready", () => {
     window.setAlwaysOnTop(true);
     window.setTitle("BridgeBBCC Desktop");
     process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
-    window.on("move", () => {
+    window.on("moved", () => {
         electron_json_storage_1.default.set("position", { x: mainWindowState.x, y: mainWindowState.y }, process.env.DEBUG
             ? () => {
                 console.log("saved", {

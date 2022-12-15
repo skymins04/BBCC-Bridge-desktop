@@ -26,7 +26,7 @@ app.on("ready", () => {
   window.setTitle("BridgeBBCC Desktop");
   process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
 
-  window.on("move", () => {
+  window.on("moved", () => {
     electronStorage.set(
       "position",
       { x: mainWindowState.x, y: mainWindowState.y },
