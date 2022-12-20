@@ -1,13 +1,31 @@
-import { app, BrowserWindow, Menu, shell, Tray } from "electron";
+import { app, BrowserWindow, Menu, nativeImage, shell, Tray } from "electron";
 import electronWindowState from "electron-window-state";
 import electronStorage from "electron-json-storage";
 import fs from "fs";
 import path from "path";
 
+const title = "BridgeBBCC Desktop";
+const version = "v1.0.0";
+
+const BridgeBBCCRootDirPath = path.resolve(__dirname, "BridgeBBCC");
+const BridgeBBCCConfigFilePath = path.join(
+  BridgeBBCCRootDirPath,
+  "lib",
+  "config.js"
+);
+const BridgeBBCCLibDirPath = path.join(BridgeBBCCRootDirPath, "lib");
+const BridgeBBCCThemeDirPath = path.join(BridgeBBCCRootDirPath, "theme");
+const BridgeBBCCClientHTMLPath = path.join(
+  BridgeBBCCRootDirPath,
+  "client.html"
+);
+
 let window: BrowserWindow;
 let tray: Tray;
 let mainWindowState: electronWindowState.State;
 let interval: NodeJS.Timer;
+
+const getTitleAndVersion = () => `${title} ${version}`;
 
 const savePosition = () => {
   electronStorage.set(
@@ -40,20 +58,16 @@ const saveSize = () => {
 };
 
 const changeTheme = (themeName: string) => {
-  const configFile = fs
-    .readFileSync(`./public/BridgeBBCC/lib/config.js`)
-    .toString();
+  const configFile = fs.readFileSync(BridgeBBCCConfigFilePath).toString();
   fs.writeFileSync(
-    `./public/BridgeBBCC/lib/config.js`,
+    BridgeBBCCConfigFilePath,
     configFile.replace(/(?<=theme *\: *\").*(?=\"\,)/gm, themeName)
   );
   window.reload();
 };
 
 const checkCurrentTheme = () => {
-  const configFile = fs
-    .readFileSync(`./public/BridgeBBCC/lib/config.js`)
-    .toString();
+  const configFile = fs.readFileSync(BridgeBBCCConfigFilePath).toString();
   const theme = configFile.match(/(?<=theme *\: *\").*(?=\"\,)/gm);
   if (!theme) throw Error("Cannot found theme");
   return theme[0];
@@ -67,7 +81,7 @@ const setTrayContextMenu = () => {
     click: () => void;
     checked: boolean;
   }[] = fs
-    .readdirSync(`./public/BridgeBBCC/theme`)
+    .readdirSync(BridgeBBCCThemeDirPath)
     .filter((x) => x !== "default")
     .map((x) => ({
       label: x,
@@ -76,7 +90,7 @@ const setTrayContextMenu = () => {
       checked: currentTheme === x,
     }));
   const trayMenus = Menu.buildFromTemplate([
-    { label: "BridgeBBCC Desktop v1.0.0", type: "normal" },
+    { label: getTitleAndVersion(), type: "normal" },
     { type: "separator" },
     {
       label: "테마선택",
@@ -93,13 +107,12 @@ const setTrayContextMenu = () => {
     {
       label: "설정폴더 열기",
       type: "normal",
-      click: () => shell.openPath(path.resolve(__dirname, "BridgeBBCC", "lib")),
+      click: () => shell.openPath(BridgeBBCCLibDirPath),
     },
     {
       label: "테마폴더 열기",
       type: "normal",
-      click: () =>
-        shell.openPath(path.resolve(__dirname, "BridgeBBCC", "theme")),
+      click: () => shell.openPath(BridgeBBCCThemeDirPath),
     },
     {
       label: "채팅창 새로고침",
@@ -129,23 +142,23 @@ app.on("ready", () => {
       nodeIntegration: true,
     },
   });
-  window.loadFile(`./public/BridgeBBCC/client.html`);
+  window.loadFile(BridgeBBCCClientHTMLPath);
   window.setAlwaysOnTop(true);
-  window.setTitle("BridgeBBCC Desktop");
+  window.setTitle(title);
   process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
-
   interval = setInterval(() => {
     savePosition();
     saveSize();
   }, 500);
   mainWindowState.manage(window);
 
-  tray = new Tray(`./public/logo.png`);
-
-  tray.setToolTip("BridgeBBCC Desktop v1.0.0");
-
+  const trayIconImage = nativeImage.createFromPath(
+    path.resolve(__dirname, "logo.png")
+  );
+  tray = new Tray(trayIconImage.resize({ width: 16, height: 16 }));
+  tray.setToolTip(getTitleAndVersion());
   setTrayContextMenu();
-  fs.watch(path.resolve(__dirname, "BridgeBBCC", "theme"), setTrayContextMenu);
+  fs.watch(BridgeBBCCThemeDirPath, setTrayContextMenu);
 });
 
 app.on("will-quit", () => {
