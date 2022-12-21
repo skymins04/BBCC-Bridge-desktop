@@ -1,7 +1,7 @@
 import path from "path";
 
 export const title = "BridgeBBCC Desktop";
-export const version = "v1.0.1";
+export const version = "v1.0.2";
 export const logoImagePath = path.resolve(__dirname, "logo.png");
 
 export const BridgeBBCCRootDirPath = path.resolve(__dirname, "BridgeBBCC");

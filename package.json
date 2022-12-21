@@ -1,6 +1,6 @@
 {
   "name": "BridgeBBCC-desktop",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "public/index.js",
   "repository": "https://github.com/skymins04/BridgeBBCC-desktop.git",
   "author": "skymins04 <skymin0417@gmail.com>",
