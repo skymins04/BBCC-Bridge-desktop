@@ -9,7 +9,7 @@ const electron_json_storage_1 = __importDefault(require("electron-json-storage")
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const title = "BridgeBBCC Desktop";
-const version = "v1.0.0";
+const version = "v1.0.1";
 const BridgeBBCCRootDirPath = path_1.default.resolve(__dirname, "BridgeBBCC");
 const BridgeBBCCConfigFilePath = path_1.default.join(BridgeBBCCRootDirPath, "lib", "config.js");
 const BridgeBBCCLibDirPath = path_1.default.join(BridgeBBCCRootDirPath, "lib");
@@ -71,9 +71,11 @@ const setTrayContextMenu = () => {
         {
             label: "마우스 클릭 통과",
             type: "checkbox",
-            checked: isIgnoreMouseEvent,
+            checked: electron_json_storage_1.default.getSync("ignoreMouseEvent").state ||
+                isIgnoreMouseEvent,
             click: (e) => {
                 window.setIgnoreMouseEvents(e.checked);
+                electron_json_storage_1.default.set("ignoreMouseEvent", { state: e.checked }, () => { });
             },
         },
         {
@@ -132,7 +134,8 @@ electron_1.app.on("ready", () => {
     window.loadFile(BridgeBBCCClientHTMLPath);
     window.setAlwaysOnTop(true);
     window.setTitle(title);
-    window.setIgnoreMouseEvents(isIgnoreMouseEvent);
+    window.setIgnoreMouseEvents(electron_json_storage_1.default.getSync("ignoreMouseEvent").state ||
+        isIgnoreMouseEvent);
     process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
     interval = setInterval(() => {
         savePosition();

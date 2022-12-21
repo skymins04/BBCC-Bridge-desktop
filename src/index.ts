@@ -96,9 +96,12 @@ const setTrayContextMenu = () => {
     {
       label: "마우스 클릭 통과",
       type: "checkbox",
-      checked: isIgnoreMouseEvent,
+      checked:
+        (electronStorage.getSync("ignoreMouseEvent") as any).state ||
+        isIgnoreMouseEvent,
       click: (e) => {
         window.setIgnoreMouseEvents(e.checked);
+        electronStorage.set("ignoreMouseEvent", { state: e.checked }, () => {});
       },
     },
     {
@@ -160,7 +163,10 @@ app.on("ready", () => {
   window.loadFile(BridgeBBCCClientHTMLPath);
   window.setAlwaysOnTop(true);
   window.setTitle(title);
-  window.setIgnoreMouseEvents(isIgnoreMouseEvent);
+  window.setIgnoreMouseEvents(
+    (electronStorage.getSync("ignoreMouseEvent") as any).state ||
+      isIgnoreMouseEvent
+  );
   process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
   interval = setInterval(() => {
     savePosition();
