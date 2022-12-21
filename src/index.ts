@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 
 const title = "BridgeBBCC Desktop";
-const version = "v1.0.0";
+const version = "v1.0.1";
 
 const BridgeBBCCRootDirPath = path.resolve(__dirname, "BridgeBBCC");
 const BridgeBBCCConfigFilePath = path.join(
@@ -24,6 +24,7 @@ let window: BrowserWindow;
 let tray: Tray;
 let mainWindowState: electronWindowState.State;
 let interval: NodeJS.Timer;
+let isIgnoreMouseEvent = false;
 
 const getTitleAndVersion = () => `${title} ${version}`;
 
@@ -93,6 +94,14 @@ const setTrayContextMenu = () => {
     { label: getTitleAndVersion(), type: "normal" },
     { type: "separator" },
     {
+      label: "마우스 클릭 통과",
+      type: "checkbox",
+      checked: isIgnoreMouseEvent,
+      click: (e) => {
+        window.setIgnoreMouseEvents(e.checked);
+      },
+    },
+    {
       label: "테마선택",
       submenu: [
         {
@@ -118,6 +127,12 @@ const setTrayContextMenu = () => {
       label: "채팅창 새로고침",
       type: "normal",
       click: () => window.reload(),
+    },
+    { type: "separator" },
+    {
+      label: "종료",
+      type: "normal",
+      click: () => window.close(),
     },
   ]);
   tray.setContextMenu(trayMenus);
@@ -145,6 +160,7 @@ app.on("ready", () => {
   window.loadFile(BridgeBBCCClientHTMLPath);
   window.setAlwaysOnTop(true);
   window.setTitle(title);
+  window.setIgnoreMouseEvents(isIgnoreMouseEvent);
   process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
   interval = setInterval(() => {
     savePosition();

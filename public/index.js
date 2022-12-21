@@ -19,6 +19,7 @@ let window;
 let tray;
 let mainWindowState;
 let interval;
+let isIgnoreMouseEvent = false;
 const getTitleAndVersion = () => `${title} ${version}`;
 const savePosition = () => {
     electron_json_storage_1.default.set("position", { x: mainWindowState.x, y: mainWindowState.y }, process.env.DEBUG
@@ -68,6 +69,14 @@ const setTrayContextMenu = () => {
         { label: getTitleAndVersion(), type: "normal" },
         { type: "separator" },
         {
+            label: "마우스 클릭 통과",
+            type: "checkbox",
+            checked: isIgnoreMouseEvent,
+            click: (e) => {
+                window.setIgnoreMouseEvents(e.checked);
+            },
+        },
+        {
             label: "테마선택",
             submenu: [
                 {
@@ -94,6 +103,12 @@ const setTrayContextMenu = () => {
             type: "normal",
             click: () => window.reload(),
         },
+        { type: "separator" },
+        {
+            label: "종료",
+            type: "normal",
+            click: () => window.close(),
+        },
     ]);
     tray.setContextMenu(trayMenus);
 };
@@ -117,6 +132,7 @@ electron_1.app.on("ready", () => {
     window.loadFile(BridgeBBCCClientHTMLPath);
     window.setAlwaysOnTop(true);
     window.setTitle(title);
+    window.setIgnoreMouseEvents(isIgnoreMouseEvent);
     process.env.DEBUG && window.webContents.openDevTools({ mode: "undocked" });
     interval = setInterval(() => {
         savePosition();

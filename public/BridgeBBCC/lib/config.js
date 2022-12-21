@@ -8,7 +8,7 @@
   themeName: "",
   msgExistDuration: 0,
   msgAniDuration: 0,
-  debugLevel: 2,
+  debugLevel: 0,
   useDisplayName: true,
   loadCheerImgs: true,
   loadTwitchCons: true,
