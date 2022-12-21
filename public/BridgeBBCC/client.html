@@ -14,11 +14,18 @@
 <script type="text/javascript" charset="utf-8" src="lib/config.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/browserified.js"></script>
 <script>
+	const electron = require('electron');
+	
+	electron.ipcRenderer.on('show-border', (e, isShow) => {
+		if(isShow) document.getElementsByTagName('html')[0].classList.add('show-border-lock');
+		else document.getElementsByTagName('html')[0].classList.remove('show-border-lock');
+	});
+
 	window.addEventListener("keydown", (e) => {
-		if(e.which === 81 && e.shiftKey && e.ctrlKey) document.body.classList.add('hoverd');
+		if(e.which === 81 && e.shiftKey && e.ctrlKey) document.getElementsByTagName('html')[0].classList.add('show-border');
 	});
 	window.addEventListener("keyup", (e) => {
-		document.body.classList.remove('hoverd');
+		document.getElementsByTagName('html')[0].classList.remove('show-border');
 	});
 </script>
 <style>
@@ -60,7 +67,7 @@
 		position: relative;
 		overflow: hidden;
 	}
-	body:hover, .hoverd {
+	.show-border, .show-border-lock {
 		width: calc(100% - 2px);
 		height: calc(100% - 2px);
 		border: 1px solid red;
