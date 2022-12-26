@@ -22,7 +22,7 @@
   webSocket: "wss://irc-ws.chat.twitch.tv:443",
   nick: "justinfan16831",
   pass: "foobar",
-  channel: "#maker_betaman",
+  channel: "#mr_watert",
   retryInterval: 2,
   allMessageHandle: false,
   muteUser: ["Nightbot"],
