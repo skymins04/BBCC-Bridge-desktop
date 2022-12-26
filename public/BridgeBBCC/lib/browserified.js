@@ -699,6 +699,10 @@
                 badgeList[name + "/" + tier] = tiers[tier]["image_url_1x"];
               });
             });
+
+            Object.keys(customBadges).forEach(function (name) {
+              badgeList[name] = customBadges[name];
+            });
           };
 
           globalBadgeRequest.onreadystatechange = function (evt) {
