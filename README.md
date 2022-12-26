@@ -40,3 +40,8 @@ BridgeBBCC 채팅창은 시스템 트레이 아이콘을 제공합니다.
 BridgeBBCC/lib/custom_badge.js 파일을 수정해 트위치에서 제공되는 뱃지 이미지를 사용자지정 뱃지 이미지로 교체할 수 있습니다.
 
 ![readme_2.png](./readme/readme_2.png)
+
+## 알려진 문제
+
+- Windows 환경에서 uninstaller가 정상동작하지 않는 문제
+  - 해결법: 파일 탐색기에서 "%HomePath%\AppData\Local\Programes\BridgeBBCC Desktop" 디렉토리를 제거해주세요
